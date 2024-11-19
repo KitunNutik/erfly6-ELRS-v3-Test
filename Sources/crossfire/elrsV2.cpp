@@ -16,9 +16,9 @@
 
 struct FieldProps
 {
-  uint8_t nameOffset;     
+  uint16_t nameOffset;
+  uint16_t valuesOffset;
   uint8_t nameLength;
-  uint8_t valuesOffset;  
   uint8_t valuesLength;
   uint8_t parent;
   uint8_t type;
@@ -65,18 +65,18 @@ static uint8_t reusableBuffer[1200];
 static constexpr uint8_t RESULT_OK = 2;
 static constexpr uint8_t RESULT_CANCEL = 1;
 
-static constexpr uint8_t NAMES_BUFFER_SIZE  = 192;
-static constexpr uint8_t VALUES_BUFFER_SIZE = 176;
+static constexpr uint16_t NAMES_BUFFER_SIZE  = 400;
+static constexpr uint16_t VALUES_BUFFER_SIZE = 968;
 static uint8_t *namesBuffer = reusableBuffer;
-uint8_t namesBufferOffset = 0;
+uint16_t namesBufferOffset = 0;
 static uint8_t *valuesBuffer = &reusableBuffer[NAMES_BUFFER_SIZE];
-uint8_t valuesBufferOffset = 0;
+uint16_t valuesBufferOffset = 0;
 
 static constexpr uint8_t FIELD_DATA_MAX_LEN = (512 - NAMES_BUFFER_SIZE - VALUES_BUFFER_SIZE);
 static uint8_t *fieldData = &reusableBuffer[NAMES_BUFFER_SIZE + VALUES_BUFFER_SIZE];
 uint8_t fieldDataLen = 0;
 
-static constexpr uint8_t FIELDS_MAX_COUNT = 32;
+static constexpr uint8_t FIELDS_MAX_COUNT = 38;
 static FieldProps fields[FIELDS_MAX_COUNT];
 uint8_t fieldsLen = 0;
 
@@ -256,7 +256,7 @@ static uint8_t strRemove(char * src, const char * str, const uint8_t len)
   return removedLen;
 }
 
-void fieldTextSelectionLoad(FieldProps * field, uint8_t * data, uint8_t offset)
+void fieldTextSelectionLoad(FieldProps * field, uint8_t * data, uint16_t offset)
 {
   uint8_t len = strlen((char*)&data[offset]);
   field->value = data[offset + len + 1];
@@ -284,7 +284,7 @@ static uint8_t semicolonPos(const char * str, uint8_t last)
 
 void fieldTextSelectionDisplay(FieldProps * field, uint8_t y, uint8_t attr)
 {
-  uint8_t start = field->valuesOffset;
+  uint16_t start = field->valuesOffset;
   uint8_t len;
   uint32_t i = 0;
   while (i++ < field->value)
@@ -356,7 +356,7 @@ void noopOpen(FieldProps * field)
 {
 }
 
-void fieldCommandLoad(FieldProps * field, uint8_t * data, uint8_t offset)
+void fieldCommandLoad(FieldProps * field, uint8_t * data, uint16_t offset)
 {
   field->value = data[offset];
   field->valuesOffset = data[offset+1]; 
