@@ -60,7 +60,7 @@ static constexpr uint8_t maxLineIndex  =  6;
 static constexpr uint8_t textXoffset   =  0;
 static constexpr uint8_t textYoffset   =  3;
 static constexpr uint8_t textSize      =  8;
-static uint8_t reusableBuffer[1200];
+static uint8_t reusableBuffer[1600];
 
 static constexpr uint8_t RESULT_OK = 2;
 static constexpr uint8_t RESULT_CANCEL = 1;
@@ -72,7 +72,7 @@ uint16_t namesBufferOffset = 0;
 static uint8_t *valuesBuffer = &reusableBuffer[NAMES_BUFFER_SIZE];
 uint16_t valuesBufferOffset = 0;
 
-static constexpr uint8_t FIELD_DATA_MAX_LEN = (512 - NAMES_BUFFER_SIZE - VALUES_BUFFER_SIZE);
+static constexpr uint8_t FIELD_DATA_MAX_LEN = 200;
 static uint8_t *fieldData = &reusableBuffer[NAMES_BUFFER_SIZE + VALUES_BUFFER_SIZE];
 uint8_t fieldDataLen = 0;
 
